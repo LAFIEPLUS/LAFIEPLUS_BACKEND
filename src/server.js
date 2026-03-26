@@ -1,5 +1,4 @@
-import app from "../api";
-import { PORT, validateEnvVars } from "./config/env.js";
+import { PORT, validateEnvVars, NODE_ENV } from "./config/env.js";
 
 
 try {
@@ -8,6 +7,8 @@ try {
     console.error("Missing env vars:", error.message);
     process.exit(1);
 }
+
+import app from "./app.js";
 
 const server = app.listen(PORT, () => {
     console.log(

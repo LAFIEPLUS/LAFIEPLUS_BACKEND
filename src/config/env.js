@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { required } from "joi";
+
 
 const requiredEnvVars = ["MONGODB_URI", "JWT_SECRET_KEY"];
 
