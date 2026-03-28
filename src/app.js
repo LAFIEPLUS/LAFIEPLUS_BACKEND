@@ -6,6 +6,7 @@ import morgan from "morgan";
 
 import connectDB  from "./config/db.js";
 import { CLIENT_URL, NODE_ENV } from "./config/env.js";
+import { apiLimiter } from "./middleware/rateLimiter.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 
@@ -36,7 +37,10 @@ app.use(async (req, res, next) => {
     }
 });
 
-// --- Rate Limiting ---
+//---Rates Limiting Middleware---
+app.use("/api", apiLimiter);
+
+// --- Health Check ---
 app.get("/", (req, res) => res.json({success: true, message: "API is running 🚀", env: NODE_ENV})
 );
 
