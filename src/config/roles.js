@@ -10,7 +10,7 @@
 
 export const ROLES = {
     USER: "user",
-    PHYSICIAN: "physician",
+    PARTNER: "partner",
     ADMIN: "admin",
 };
 
@@ -70,7 +70,7 @@ export const ROLE_PERMISSIONS = {
         PERMISSIONS.CREATE_REFERRAL,
         PERMISSIONS.TRACK_REFERRAL
     ],
-    [ROLES.PHYSICIAN]: [
+    [ROLES.PARTNER]: [
         PERMISSIONS.READ_OWN_PROFILE,
         PERMISSIONS.UPDATE_OWN_PROFILE,
         PERMISSIONS.USE_SYMPTOM_CHECKER,

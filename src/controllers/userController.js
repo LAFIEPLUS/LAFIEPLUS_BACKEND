@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { deleteFromCloudinary } from "../config/cloudinary.js";
 import { UserModel } from "../models/User.js";
-import { sendError, sendSuccess } from "../utils/apiResponse";
-import asyncHandler from "../utils/asyncHandler";
+import { sendError, sendSuccess } from "../utils/apiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import { sendContactEmail } from "../utils/emailService.js";
 
 // --- Helper function to validate MongoDB ObjectId

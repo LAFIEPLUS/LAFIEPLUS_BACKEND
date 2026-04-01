@@ -1,5 +1,6 @@
 import Joi from "joi";
-import { ROLES } from "../config/roles.js";
+import { ROLES } from "../src/config/roles.js";
+
 
 export const updateProfileSchema = Joi.object({
   name:  Joi.string().min(2).max(50),

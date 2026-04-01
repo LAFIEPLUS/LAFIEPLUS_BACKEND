@@ -17,9 +17,9 @@ export const register = asyncHandler(async (req, res) => {
 
     const existingUser = await UserModel.findOne({
         $or: [
-            ...{ email? [{ email }]: [] },
-            ...{ phone? [{ phone }]: [] }
-        ]
+            ...(email ? [{ email }] : []),
+            ... (phone ? [{ phone }] : []),
+        ],
     });
 
     if (existingUser)

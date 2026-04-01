@@ -8,6 +8,8 @@ import connectDB  from "./config/db.js";
 import { CLIENT_URL, NODE_ENV } from "./config/env.js";
 import { apiLimiter } from "./middleware/rateLimiter.js";
 import errorHandler from "./middleware/errorHandler.js";
+import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 
 const app = express();
@@ -32,6 +34,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(async (req, res, next) => {
     try {
         await connectDB();
+        next();
     } catch (err) {
         next(err);
     }
@@ -43,6 +46,12 @@ app.use("/api", apiLimiter);
 // --- Health Check ---
 app.get("/", (req, res) => res.json({success: true, message: "API is running 🚀", env: NODE_ENV})
 );
+app.get("/health", (req, res) => res.json({success: true, message: "Healthy", timestamp: new Date().toISOString()})
+);
+
+// --- Routes ---
+app.use("api/auth", authRouter);
+app.use("/api/users", userRouter);
 
 // --- 404 Handler ---
 app.use((req, res) => res.status(404).json({success: false, message: `Route ${req.originalUrl} not found`})
