@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { ROLES } from "../config/roles.js";
 
 
 const userSchema = new Schema({
@@ -14,8 +15,15 @@ const userSchema = new Schema({
         type: String,
         required: [true, "Email is required"],
         unique: true,
+        sparse: true, // Allows null (user may register without email) but enforces uniqueness if provided
         lowercase: true,
         match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
+    },
+    phone: {
+        type: String,
+        unique: true,
+        sparse: true, // Allows null (user may register without phone) but enforces uniqueness if provided
+        match: [/^\+?[\d\s\-().]{7, 20}$/, "Please enter a valid phone number"],
     },
     password: {
         type: String,
@@ -25,12 +33,36 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ["user", "clinician", "admin"],
-        default: "user",
+        enum: Object.values(ROLES),
+        default: ROLES.USER,
+    },
+
+    healthProfile: {
+        age: { type: Number, min: [0, "Age cannot be negative"], max: 120 },
+        gender: { type: String, enum: ["male", "female", "other", "Prefer not to say"] },
+        medicalHistory: { type: [String], default: [] },
+        medications: { type: [String], default: [] },
+        allergies: { type: [String], default: [] },
+    },
+    partnerInfo: {
+        partnerName: { type: String, trim: true, maxlenght: [100, "Partner name cannot exceed 100 characters"] },
+        partnerPhone: {
+            type: String,
+            match: [/^\+?[\d\s\-().]{7, 20}$/, "Please enter a valid phone number"],
+        },
+        partnerEmail: {
+            type: String,
+            lowercase: true,
+            match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
+        },
     },
     isActive: {
         type: Boolean,
         default: true,
+    },
+    privacySettings: {
+        shareAnonymousData: { type: Boolean, default: false },
+        receivePromotionalEmails: { type: Boolean, default: true },
     },
     avatar: {
         url: { type: String, default: null },
@@ -45,6 +77,14 @@ const userSchema = new Schema({
         toObject: { virtuals: true },
     }
 );
+
+// Ensure at least one contact method is provided (email or phone)
+userSchema.pre("validate", function (next) {
+    if (!this.email && !this.phone) {
+        return next(new Error("At least one contact method (email or phone) is required"));
+    }
+    next();
+});
 
 //Hash password before saving
 userSchema.pre("save", async function (next) {
