@@ -23,7 +23,7 @@ const userSchema = new Schema({
         type: String,
         unique: true,
         sparse: true, // Allows null (user may register without phone) but enforces uniqueness if provided
-        match: [/^\+?[\d\s\-().]{7, 20}$/, "Please enter a valid phone number"],
+        match: [/^\+?[\d\s\-().]{7,20}$/, "Please enter a valid phone number"],
     },
     password: {
         type: String,
