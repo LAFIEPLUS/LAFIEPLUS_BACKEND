@@ -50,8 +50,8 @@ app.get("/health", (req, res) => res.json({success: true, message: "Healthy", ti
 );
 
 // --- Routes ---
-app.use("api/auth", authRouter);
-app.use("/api/users", userRouter);
+app.use(authRouter);
+app.use(userRouter);
 
 // --- 404 Handler ---
 app.use((req, res) => res.status(404).json({success: false, message: `Route ${req.originalUrl} not found`})
