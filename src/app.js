@@ -14,6 +14,8 @@ import userRouter from "./routes/userRoutes.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 // ---Security and Logging---
 app.use(helmet());
 app.use(cors({
