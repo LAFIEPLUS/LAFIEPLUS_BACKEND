@@ -28,7 +28,9 @@ export const register = asyncHandler(async (req, res) => {
     const user = await UserModel.create({ name, email, password, phone, role, healthProfile, partnerInfo: role === "partner" ? partnerInfo : undefined });
 
     if (email) {
-        sendWelcomeEmail({ name: user.name, email: user.email }).catch((err) =>
+        sendWelcomeEmail({ name: user.name, email: user.email })
+        .then(() => console.log(`✅ Welcome email sent to ${email}`))
+        .catch((err) =>
             console.error("welcome email failed:", err.message)
         );
     }
