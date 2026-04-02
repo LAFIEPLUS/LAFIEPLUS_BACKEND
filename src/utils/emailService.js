@@ -1,5 +1,11 @@
 import { sendEmail } from "../config/mailer.js";
 import { CLIENT_URL } from "../config/env.js";
+import { 
+    contactTemplate, 
+    passwordResetConfirmationTemplate, 
+    passwordResetTemplate, 
+    welcomeTemplate
+} from "./emailTemplates/index.js";
 
 export const sendWelcomeEmail = ({ name, email }) => sendEmail({
     to: email,
