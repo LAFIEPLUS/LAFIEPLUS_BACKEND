@@ -19,7 +19,7 @@ try {
     console.log("MongoDB connected:", conn.connection.host);
 
 } catch (error) {
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log("MongoDB connection failed:", error.message);
     throw error; // Let the caller handle
 }
 };
