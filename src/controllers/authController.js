@@ -147,10 +147,18 @@ export const resetPassword = asyncHandler(async (req, res) => {
     user.resetPasswordExpire = undefined;
     await user.save();
 
-    sendPasswordResetConfirmationEmail({ name: user.name, email: user.email }).catch((err) =>
-        console.error("password reset confirmation email failed:", err.message)
-    );
 
     const token = generateToken(user._id);
+
+    if (user.email) {
+        try {
+            await sendPasswordResetConfirmationEmail({ name: user.name, email: user.email });
+            console.log(`✅ Password reset confirmation email sent to ${user.email}`);
+        } catch (error) {
+            console.error("❌ Failed to send password reset confirmation email:", error.message);
+            // Don't return an error response since the password reset itself was successful
+        }
+    }
+
     sendSuccess(res, 200, "Password reset successful", { token });
 });
