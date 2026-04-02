@@ -27,15 +27,25 @@ export const register = asyncHandler(async (req, res) => {
 
     const user = await UserModel.create({ name, email, password, phone, role, healthProfile, partnerInfo: role === "partner" ? partnerInfo : undefined });
 
-    if (email) {
-        sendWelcomeEmail({ name: user.name, email: user.email })
-        .then(() => console.log(`✅ Welcome email sent to ${email}`))
-        .catch((err) =>
-            console.error("welcome email failed:", err.message)
-        );
-    }
+    // if (email) {
+    //     sendWelcomeEmail({ name: user.name, email: user.email })
+    //     .then(() => console.log(`✅ Welcome email sent to ${email}`))
+    //     .catch((err) =>
+    //         console.error("welcome email failed:", err.message)
+    //     );
+    // }
 
     const token = generateToken(user._id);
+
+    if (email) {
+        try {
+            await sendWelcomeEmail({ name: user.name, email: user.email })
+            console.log(`✅ Welcome email sent to ${email}`)
+        } catch (err) {
+            console.error("❌ Welcome email failed:", err.message)
+            // Don't return — registration still succeeds
+        }
+    }
     sendSuccess(res, 201, "Registraton successful", {
         token,
         user: {
