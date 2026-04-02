@@ -3,61 +3,103 @@ import { CLIENT_URL, EMAIL_FROM_NAME } from "../../config/env.js";
 
 const baseTemplate = (content) => `
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>${EMAIL_FROM_NAME}<titel>
-    <style>
-    body { margin:0; padding:0; background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
-    .wrapper { max-width:600px; margin:40px auto; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.08); }
-    .header { background:#111827; padding:28px 40px; }
-    .header h1 { margin:0; color:#fff; font-size:22px; font-weight:700; }
-    .body { padding:36px 40px; color:#374151; line-height:1.7; font-size:15px; }
-    .body h2 { margin:0 0 16px; font-size:20px; color:#111827; }
-    .body p { margin:0 0 16px; }
-    .btn { display:inline-block; margin:8px 0 24px; padding:13px 28px; background:#111827; color:#fff!important; text-decoration:none; border-radius:6px; font-weight:600; font-size:15px; }
-    .divider { border:none; border-top:1px solid #e5e7eb; margin:24px 0; }
-    .footer { padding:20px 40px; background:#f9fafb; text-align:center; font-size:12px; color:#9ca3af; }
-  </style>
+  <meta charset="UTF-8" />
+  <title>${EMAIL_FROM_NAME}</title>
 </head>
-<body>
-    <div class="wrapper">
-    <div class="header">
-    <h1>${EMAIL_FROM_NAME}</h1>
-    </div>
-    <div class="body">${content}</div>
-    <div class="footer">© ${new Date().getFullYear()} ${EMAIL_FROM_NAME}. All rights reserved.</div>
-    </div>
+<body style="margin:0;padding:0;background-color:#f4f4f5;font-family:Arial,sans-serif;">
+  
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:20px 0;">
+    <tr>
+      <td align="center">
+
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="background:#111827;padding:20px;text-align:center;">
+              <h1 style="color:#ffffff;margin:0;font-size:20px;">
+                ${EMAIL_FROM_NAME}
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:30px;color:#374151;font-size:15px;line-height:1.6;">
+              ${content}
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#f9fafb;padding:15px;text-align:center;font-size:12px;color:#9ca3af;">
+              © ${new Date().getFullYear()} ${EMAIL_FROM_NAME}
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>
 `;
 
-export const welcomeTemplate = ({ name }) => baseTemplate(`  <h2>Welcome aboard, ${name}! 🎉</h2>
+export const welcomeTemplate = ({ name }) => baseTemplate(`
+  <h2 style="margin-top:0;color:#111827;">
+    Welcome, ${name}! 🎉
+  </h2>
 
-    <p>Your account has been created successfully. We're excited to have you with us.</p>
+  <p>
+    Your account has been successfully created. We're excited to have you on board.
+  </p>
 
-    <a href="${CLIENT_URL}/login" class="btn">Go to Dashboard</a>
+  <p style="text-align:center;">
+    <a href="${CLIENT_URL}/login"
+       style="display:inline-block;padding:12px 24px;background:#111827;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
+       Go to Dashboard
+    </a>
+  </p>
 
-    <hr class="divider"/>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;" />
 
-    <p style="font-size:13px;color:#6b7280;">If you didn't create this account, please ignore this email.</p>
-  `);
+  <p style="font-size:13px;color:#6b7280;">
+    If you didn’t create this account, you can safely ignore this email.
+  </p>
+`);
 
 export const passwordResetTemplate = ({ name, resetUrl, expiresInMinutes }) => baseTemplate(`
-    <h2>Reset your password</h2>
+  <h2 style="margin-top:0;color:#111827;">Reset your password</h2>
 
-    <p>Hi ${name}, we received a request to reset your password.</p>
+  <p>Hi ${name},</p>
 
-    <p>This link expires in <strong>${expiresInMinutes} minutes</strong>.</p>
+  <p>
+    We received a request to reset your password. This link will expire in 
+    <strong>${expiresInMinutes} minutes</strong>.
+  </p>
 
-    <a href="${resetUrl}" class="btn">Reset Password</a>
-    <hr class="divider"/>
+  <p style="text-align:center;">
+    <a href="${resetUrl}"
+       style="display:inline-block;padding:12px 24px;background:#111827;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold;">
+       Reset Password
+    </a>
+  </p>
 
-    <p style="font-size:13px;color:#6b7280;">If you didn't request this, you can safely ignore this email.</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;" />
 
-    <p style="font-size:13px;color:#6b7280;">Or copy this URL:<br/><span style="color:#111827;">${resetUrl}</span></p>
-  `);
+  <p style="font-size:13px;color:#6b7280;">
+    If you didn’t request this, you can ignore this email.
+  </p>
+
+  <p style="font-size:13px;color:#6b7280;">
+    Or copy this link:<br/>
+    ${resetUrl}
+  </p>
+`);
 
 export const passwordResetConfirmationTemplate = ({ name }) => baseTemplate(`
     <h2>Password reset confirmed</h2>
