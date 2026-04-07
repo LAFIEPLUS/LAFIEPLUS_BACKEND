@@ -1,4 +1,4 @@
-import mongoose, { Promise } from "mongoose";
+import mongoose from "mongoose";
 import { deleteFromCloudinary } from "../config/cloudinary.js";
 import { UserModel } from "../models/User.js";
 import { sendError, sendSuccess } from "../utils/apiResponse.js";
