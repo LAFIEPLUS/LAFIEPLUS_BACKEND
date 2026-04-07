@@ -1,17 +1,27 @@
+import jwt from "jsonwebtoken";
+import { BlacklistedToken } from "../models/User.js";
+
 /**
- * In-memory token blacklist for logout.
- * Tokens are cleared every hour to prevent memory bloat.
- * For production scale, replace with Redis.
+ * Add a token to the blacklist.
+ * Automatically sets expiry to match the token's own expiry
+ * so MongoDB cleans it up when it's no longer needed
  */
 
-const blacklist = new Set();
 
-export const blacklistToken = (token) => blacklist.add(token);
 
-export const isBlacklisted = (token) => blacklist.has(token);
+export const blacklistToken = async (token) => {
+    const decoded = jwt.decode(token);
+    const expiresAt = decoded?.exp
+        ? new Date(decoded.exp * 1000) // JWT exp is in seconds, convert to ms
+        : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // Default to 7 days if no exp claim
 
-// clear blacklistToken every hour
-setInterval(() => {
-    blacklist.clear();
-    console.log("🗑️ Token blacklist cleared");
-}, 60 * 60 * 1000);
+    await BlacklistedToken.create({ token, expiresAt });
+};
+
+/**
+ * Check if a token has been blacklisted.
+ */
+export const isBlacklisted = async (token) => {
+    const found = await BlacklistedToken.findOne({ token });
+    return !!found;
+};

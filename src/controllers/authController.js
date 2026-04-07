@@ -82,8 +82,8 @@ export const login = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/logout
 // @access  Private
 export const logout = asyncHandler(async (req, res) => {
-    blacklistToken(req.token);
-    sendSuccess(res, 200, "Logout successful");
+    await blacklistToken(req.token);
+    sendSuccess(res, 200, "Logged out successfully");
 });
 
 // @desc    Get current logged-in user

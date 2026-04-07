@@ -78,6 +78,23 @@ const userSchema = new Schema({
     }
 );
 
+
+// Blacklist Schema
+const blacklistSchema = new Schema({
+    token: {
+    type:     String,
+    required: true,
+    unique:   true,
+    index:    true,
+  },
+  expiresAt: {
+    type:    Date,
+    required: true,
+    index:   { expireAfterSeconds: 0 }, // MongoDB auto-deletes expired tokens
+  },
+});
+
+
 // Ensure at least one contact method is provided (email or phone)
 userSchema.pre("validate", function (next) {
     if (!this.email && !this.phone) {
@@ -115,3 +132,4 @@ userSchema.methods.getResetPasswordToken = function () {
 };
 
 export const UserModel = model("User", userSchema);
+export const BlacklistedToken = model("BlacklistedToken", blacklistTokenSchema);

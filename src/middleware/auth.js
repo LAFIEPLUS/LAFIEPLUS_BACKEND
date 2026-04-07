@@ -18,8 +18,8 @@ export const protect = asyncHandler(async (req, res, next) => {
     if (!token)
         return sendError(res, 401, "Not authorized, token missing");
 
-    if (isBlacklisted(token)) {
-        return sendError(res, 401, "Not authorized, token has been revoked");
+    if (await isBlacklisted(token)) {
+        return sendError(res, 401, "Session expired, Please login again");
     }
 
     try {
