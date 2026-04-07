@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Promise } from "mongoose";
 import { deleteFromCloudinary } from "../config/cloudinary.js";
 import { UserModel } from "../models/User.js";
 import { sendError, sendSuccess } from "../utils/apiResponse.js";
@@ -26,7 +26,7 @@ export const getAllUsers = asyncHandler(async (req, res) => {
     const skip = (page - 1) * limit;
     const filter = req.query.role ? { role: req.query.role } : {};
 
-    const [users, total] = await promises.all([
+    const [users, total] = await Promise.all([
         UserModel.find(filter)
             .skip(skip)
             .limit(limit)
