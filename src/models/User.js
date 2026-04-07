@@ -80,7 +80,7 @@ const userSchema = new Schema({
 
 
 // Blacklist Schema
-const blacklistSchema = new Schema({
+const blacklistedTokenSchema = new Schema({
     token: {
     type:     String,
     required: true,
@@ -132,4 +132,4 @@ userSchema.methods.getResetPasswordToken = function () {
 };
 
 export const UserModel = model("User", userSchema);
-export const BlacklistedToken = model("BlacklistedToken", blacklistTokenSchema);
+export const BlacklistedToken = model("BlacklistedToken", blacklistedTokenSchema);
