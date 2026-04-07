@@ -27,22 +27,22 @@ const userRouter = Router();
 userRouter.use(protect);
 
 // --- All Roles
-userRouter.get("/profile", can(PERMISSIONS.READ_OWN_PROFILE), getMyProfile);
+userRouter.get("/user/profile", can(PERMISSIONS.READ_OWN_PROFILE), getMyProfile);
 
-userRouter.patch("/profile", can(PERMISSIONS.UPDATE_OWN_PROFILE), updateProfile);
+userRouter.patch("/user/profile", can(PERMISSIONS.UPDATE_OWN_PROFILE), updateProfile);
 
 userRouter.post("/avatar", avatarUpload.single("avatar"), handleUploadError, uploadAvatar);
 
 userRouter.delete("/avatar", deleteAvatar);
 
 //--- Admin Only
-userRouter.get("/profiles", authorize("admin"), getAllUsers);
+userRouter.get("/user/profiles", authorize("admin"), getAllUsers);
 
-userRouter.get("/:id", authorize("admin", "partner"), getUserById);
+userRouter.get("/user/:id", authorize("admin", "partner"), getUserById);
 
-userRouter.put("/:id/role", authorize("admin"), validate(updateUserRoleSchema), updateUserRole);
+userRouter.put("/user/:id/role", authorize("admin"), validate(updateUserRoleSchema), updateUserRole);
 
-userRouter.put("/:id/status", authorize("admin"), updateUserStatus);
+userRouter.put("/user/:id/status", authorize("admin"), updateUserStatus);
 
 userRouter.post("/:id/notify", authorize("admin", "partner"), validate(notifyUserSchema), notifyUser);
 
