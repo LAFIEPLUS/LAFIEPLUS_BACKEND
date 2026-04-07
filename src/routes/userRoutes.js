@@ -36,7 +36,7 @@ userRouter.post("/avatar", avatarUpload.single("avatar"), handleUploadError, upl
 userRouter.delete("/avatar", deleteAvatar);
 
 //--- Admin Only
-userRouter.get("/", authorize("admin"), getAllUsers);
+userRouter.get("/profiles", authorize("admin"), getAllUsers);
 
 userRouter.get("/:id", authorize("admin", "partner"), getUserById);
 
