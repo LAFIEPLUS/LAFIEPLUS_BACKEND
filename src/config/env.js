@@ -37,3 +37,6 @@ export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 export const GMAIL_USER = process.env.GMAIL_USER;
 export const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 export const EMAIL_FROM_NAME = process.env.EMAIL_FROM_NAME || "LAFIEPLUS";
+
+// AI (optional)
+export const GROQ_API_KEY = process.env.GROQ_API_KEY;
