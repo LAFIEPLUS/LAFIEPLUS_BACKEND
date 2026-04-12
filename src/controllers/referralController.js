@@ -84,7 +84,7 @@ export const getReferral = asyncHandler(async (req, res) => {
 // @desc   Update referral status
 // @route  PATCH /api/referrals/:id/status
 // @access Private (partner, admin)
-export const updateStatus = asyncHandler(async (req, res) => {
+export const updateReferralStatus = asyncHandler(async (req, res) => {
     const { status, note } = req.body;
 
     const referral = await Referral.findById(req.params.id);

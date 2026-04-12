@@ -10,6 +10,12 @@ import { apiLimiter } from "./middleware/rateLimiter.js";
 import errorHandler from "./middleware/errorHandler.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import symptomRouter from "./routes/symptomRoutes.js";
+import partnerRouter from "./routes/partnerRoutes.js";
+import referralRouter from "./routes/referralRoutes.js";
+import consultationRouter from "./routes/consultationRoute.js";
+import facilityRouter from "./routes/facilityRoutes.js";
+import libraryRouter from "./routes/libraryRoutes.js";
 
 
 const app = express();
@@ -54,6 +60,12 @@ app.get("/health", (req, res) => res.json({success: true, message: "Healthy", ti
 // --- Routes ---
 app.use(authRouter);
 app.use(userRouter);
+app.use(symptomRouter);
+app.use(partnerRouter);
+app.use(referralRouter);
+app.use(consultationRouter);
+app.use(facilityRouter);
+app.use(libraryRouter);
 
 // --- 404 Handler ---
 app.use((req, res) => res.status(404).json({success: false, message: `Route ${req.originalUrl} not found`})

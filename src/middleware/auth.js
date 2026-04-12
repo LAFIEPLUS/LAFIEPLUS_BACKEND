@@ -66,3 +66,18 @@ export const canAny = (...permissions) => (req, res, next) => {
     }
     next();
 }
+
+// ─── optionalAuth — attaches user if token present, never blocks ──
+export const optionalAuth = asyncHandler(async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer")) {
+      const token = authHeader.split(" ")[1];
+      if (!isBlacklisted(token)) {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = await User.findById(decoded.id).select("-password");
+      }
+    }
+  } catch (_) { /* ignore */ }
+  next();
+});

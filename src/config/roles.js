@@ -16,45 +16,53 @@ export const ROLES = {
 
 export const PERMISSIONS = {
     // --- Profile
-READ_OWN_PROFILE: "read:own_profile",
-UPDATE_OWN_PROFILE: "update:own_profile",
+    READ_OWN_PROFILE: "read:own_profile",
+    UPDATE_OWN_PROFILE: "update:own_profile",
 
-// --- Users (admin only)
-READ_ALL_USERS: "read:all_users",
-UPDATE_ANY_USER: "update:any_user",
-DELETE_ANY_USER: "delete:any_user",
-NOTIFY_USER: "notify_user",
+    // --- Users (admin only)
+    READ_ALL_USERS: "read:all_users",
+    UPDATE_ANY_USER: "update:any_user",
+    DELETE_ANY_USER: "delete:any_user",
+    NOTIFY_USER: "notify_user",
 
-// --- Symptom Checker
-USE_SYMPTOM_CHECKER: "use:symptom_checker",
+    // --- Symptom Checker
+    USE_SYMPTOM_CHECKER: "use:symptom_checker",
 
-// --- Health Library
-READ_HEALTH_CONTENT: "read:health_content",
-CREATE_HEALTH_CONTENT: "create:health_content",
-UPDATE_HEALTH_CONTENT: "update:health_content",
-DELETE_HEALTH_CONTENT: "delete:health_content",
+    // --- Consultations
+    REQUEST_CONSULTATION: "request:consultation",
+    CONDUCT_CONSULTATION: "conduct:consultation",
+    VIEW_CONSULTATIONS: "view:consultations",
 
-// --- Reminders
-MANAGE_OWN_REMINDERS: "manage:own_reminders",
+    // --- Health Library
+    READ_HEALTH_CONTENT: "read:health_content",
+    CREATE_HEALTH_CONTENT: "create:health_content",
+    UPDATE_HEALTH_CONTENT: "update:health_content",
+    DELETE_HEALTH_CONTENT: "delete:health_content",
 
-// --- Facility Locator
-READ_FACILITY_INFO: "read:facility_info",
-CREATE_FACILITY_INFO: "create:facility_info",
-UPDATE_FACILITY_INFO: "update:facility_info",
-DELETE_FACILITY_INFO: "delete:facility_info",
+    // --- Reminders
+    MANAGE_OWN_REMINDERS: "manage:own_reminders",
 
-// --- Referrals
-CREATE_REFERRAL: "create:referral",
-TRACK_REFERRAL: "track:referral",
+    // --- Facilities
+    READ_FACILITY_INFO: "read:facility_info",
+    READ_FACILITIES: "read:facilities",
+    CREATE_FACILITY_INFO: "create:facility_info",
+    UPDATE_FACILITY_INFO: "update:facility_info",
+    DELETE_FACILITY_INFO: "delete:facility_info",
+    MANAGE_FACILITIES: "manage:facilities",
 
-// --- Admin Dashboard
-ACCESS_ADMIN_DASHBOARD: "access:admin_dashboard",
-VIEW_ANALYTICS: "view:analytics",
-MANAGE_CONTENT: "manage:content",
-MANAGE_USERS: "manage:users",
+    // --- Referrals
+    CREATE_REFERRAL: "create:referral",
+    MANAGE_REFERRALS: "manage:referrals",
+    TRACK_REFERRAL: "track:referral",
 
-// --- Analytics
-VIEW_ANALYTICS: "view:analytics",
+    // --- Admin Dashboard
+    ACCESS_ADMIN_DASHBOARD: "access:admin_dashboard",
+    VIEW_ANALYTICS: "view:analytics",
+    MANAGE_CONTENT: "manage:content",
+    MANAGE_USERS: "manage:users",
+
+    // --- Analytics
+    VIEW_ANALYTICS: "view:analytics",
 
 };
 
@@ -65,20 +73,28 @@ export const ROLE_PERMISSIONS = {
         PERMISSIONS.UPDATE_OWN_PROFILE,
         PERMISSIONS.USE_SYMPTOM_CHECKER,
         PERMISSIONS.READ_HEALTH_CONTENT,
-        PERMISSIONS.MANAGE_OWN_REMINDERS,
         PERMISSIONS.READ_FACILITY_INFO,
+        PERMISSIONS.READ_FACILITIES,
+        PERMISSIONS.REQUEST_CONSULTATION,
+        PERMISSIONS.VIEW_CONSULTATIONS,
         PERMISSIONS.CREATE_REFERRAL,
-        PERMISSIONS.TRACK_REFERRAL
+        PERMISSIONS.TRACK_REFERRAL,
     ],
     [ROLES.PARTNER]: [
         PERMISSIONS.READ_OWN_PROFILE,
         PERMISSIONS.UPDATE_OWN_PROFILE,
-        PERMISSIONS.USE_SYMPTOM_CHECKER,
         PERMISSIONS.READ_HEALTH_CONTENT,
-        PERMISSIONS.MANAGE_OWN_REMINDERS,
+        PERMISSIONS.CREATE_HEALTH_CONTENT,
+        PERMISSIONS.UPDATE_HEALTH_CONTENT,
+        PERMISSIONS.DELETE_HEALTH_CONTENT,
         PERMISSIONS.READ_FACILITY_INFO,
-        PERMISSIONS.CREATE_REFERRAL,
-        PERMISSIONS.TRACK_REFERRAL
+        PERMISSIONS.READ_FACILITIES,
+        PERMISSIONS.MANAGE_FACILITIES,
+        PERMISSIONS.CONDUCT_CONSULTATION,
+        PERMISSIONS.VIEW_CONSULTATIONS,
+        PERMISSIONS.MANAGE_REFERRALS,
+        PERMISSIONS.TRACK_REFERRAL,
+        PERMISSIONS.VIEW_ANALYTICS,
     ],
     // [ROLES.ADMIN]: [
     //     PERMISSIONS.READ_OWN_PROFILE,
