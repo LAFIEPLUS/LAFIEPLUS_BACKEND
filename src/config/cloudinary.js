@@ -23,10 +23,19 @@ export const createUploader = (
 ) => {
     const storage = new CloudinaryStorage({
         cloudinary,
-        params: {
-            folder,
-            allowed_formats: allowedFormats,
-            transformation: [{ quality: "auto", fetch_format: "auto" }],
+        params: async (req, file) => {
+            const ext = path.extname(file.originalname).toLowerCase().slice(1);
+            const baseName = path.basename(file.originalname, path.extname(file.originalname));
+
+            return {
+                folder: `lafieplus/${folder}`,
+                public_id: `${Date.now()}-${baseName}`,
+                resource_type: "auto",
+                allowed_formats: allowedFormats,
+                transformation: ext === "pdf"
+                    ? [] // no transformation for PDFs
+                    : [{ quality: "auto", fetch_format: "auto" }],
+            };
         },
     });
 
@@ -34,9 +43,14 @@ export const createUploader = (
         storage,
         limits: {fileSize: maxSizeMB * 1024 * 1024},
         fileFilter: (_req, file, cb) => {
-            const ext = file.mimetype.split("/")[1];
-            if (!allowedFormats.includes(ext)) {
-                return cb(new Error(`Invalid file type. Allowed: ${allowedFormats.join(", ")}`), false);
+            const ext = path.extname(file.originalname).toLowerCase().slice(1);
+            const mime = file.mimetype.split("/")[1];
+
+            if (!allowedFormats.includes(ext) && !allowedFormats.includes(mime)) {
+                return cb(
+                    new Error(`Invalid file type. Allowed: ${allowedFormats.join(", ")}`),
+                    false
+                );
             }
             cb(null, true);
         },
@@ -49,13 +63,13 @@ export const avatarUpload = createUploader("avatars", ["jpg", "jpeg", "png", "we
 export const documentUpload = createUploader("documents", ["jpg", "jpeg", "png", "pdf"], 10);
 
 /**
- * Delet a file from the cloudinary by its public_id
+ * Delete a file from the cloudinary by its public_id
  */
 export const deleteFromCloudinary = async (publicId) => {
     try {
         return await cloudinary.uploader.destroy(publicId);
     } catch (error) {
-        console.error("Coudinary delete error:", error)
+        console.error("Cloudinary delete error:", error)
         throw error;        
     }
 };

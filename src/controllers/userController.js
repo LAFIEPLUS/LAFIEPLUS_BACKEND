@@ -24,7 +24,16 @@ export const getAllUsers = asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
-    const filter = req.query.role ? { role: req.query.role } : {};
+    const filter = {};
+    if (req.query.role)
+        filter.role = req.query.role;
+    if (req.query.search) {
+        filter.$or = [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+            { phone: { $regex: req.query.search, $options: "i" } },
+        ];
+    };
 
     const [users, total] = await Promise.all([
         UserModel.find(filter)
