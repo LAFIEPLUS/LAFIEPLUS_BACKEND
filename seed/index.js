@@ -1,7 +1,7 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import User from "../src/models/User.js";
+import UserModel from "../src/models/User.js";
 import HealthArticle from "../src/models/HealthArticle.js";
 import HealthFacility from "../src/models/HealthFacility.js";
 
@@ -12,7 +12,7 @@ const seed = async () => {
   console.log("Connected to MongoDB for seeding...\n");
 
   await Promise.all([
-    User.deleteMany({}),
+    UserModel.deleteMany({}),
     HealthArticle.deleteMany({}),
     HealthFacility.deleteMany({}),
   ]);
@@ -21,7 +21,7 @@ const seed = async () => {
   const password = await bcrypt.hash("Password123!", 12);
 
   // ─── Users ────────────────────────────────────────────────────────
-  const admin = await User.create({
+  const admin = await UserModel.create({
     name: "Admin User",
     email: "admin@lafieplus.com",
     password: "Password123!",
@@ -30,7 +30,7 @@ const seed = async () => {
     isActive: true,
   });
 
-  const partner1 = await User.create({
+  const partner1 = await UserModel.create({
     name: "Dr. Amara Nwosu",
     email: "dr.amara@lafieplus.com",
     phone: "+2348001234567",
@@ -48,7 +48,7 @@ const seed = async () => {
     },
   });
 
-  const partner2 = await User.create({
+  const partner2 = await UserModel.create({
     name: "Dr. Kwame Asante",
     email: "dr.kwame@lafieplus.com",
     phone: "+2348009876543",
@@ -66,7 +66,7 @@ const seed = async () => {
     },
   });
 
-  const partner3 = await User.create({
+  const partner3 = await UserModel.create({
     name: "Dr. Ngozi Okafor",
     email: "dr.ngozi@lafieplus.com",
     phone: "+2348005556666",
@@ -84,7 +84,7 @@ const seed = async () => {
     },
   });
 
-  const user1 = await User.create({
+  const user1 = await UserModel.create({
     name: "Fatima Bello",
     email: "fatima@example.com",
     phone: "+2348011111111",
@@ -102,7 +102,7 @@ const seed = async () => {
     privacySettings: { shareAnonymousData: true, receiveAlerts: true },
   });
 
-  const user2 = await User.create({
+  const user2 = await UserModel.create({
     name: "Emeka Obi",
     email: "emeka@example.com",
     phone: "+2348022222222",
@@ -195,85 +195,129 @@ const seed = async () => {
 
   // ─── Health Facilities (Lagos, Nigeria) ───────────────────────────
   const facilities = [
-    {
-      name: "Lagos Island General Hospital",
-      type: "hospital",
-      location: { type: "Point", coordinates: [3.3958, 6.4551] },
-      address: "1 Broad Street, Lagos Island, Lagos",
-      phone: "+2341234567",
-      email: "info@ligh.gov.ng",
-      services: ["emergency", "maternity", "surgery", "paediatrics", "laboratory", "radiology"],
-      operatingHours: "24/7",
-      isActive: true,
-      addedBy: admin._id,
+  {
+    name: "Korle-Bu Teaching Hospital",
+    type: "hospital",
+    location: { type: "Point", coordinates: [5.5613, -0.1976] },
+    address: "Korle-Bu, Accra",
+    phone: "+233302213300",
+    email: "info@korlebu.edu.gh",
+    services: ["emergency", "surgery", "maternity", "paediatrics", "radiology", "ICU", "cardiology"],
+    operatingHours: "24/7",
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Greater Accra Regional Hospital",
+    type: "hospital",
+    location: { type: "Point", coordinates: [5.6061, -0.1923] },
+    address: "Ridge, Accra",
+    phone: "+233302795033",
+    email: "garh@hospital.com",
+    services: ["emergency", "surgery", "maternity", "radiology", "paediatrics", "ICU"],
+    operatingHours: "24/7",
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Achimota Hospital",
+    type: "hospital",
+    location: { type: "Point", coordinates: [5.6423, -0.2190] },
+    address: "Achimota, Accra",
+    phone: "+233302302312",
+    services: ["emergency", "surgery", "maternity", "general outpatient"],
+    operatingHours: "24/7",
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Osu Health Centre",
+    type: "clinic",
+    location: { type: "Point", coordinates: [5.5437, -0.1947] },
+    address: "Osu, Accra",
+    phone: "+233302666450",
+    services: ["antenatal", "immunisation", "family planning", "general outpatient", "HIV testing"],
+    operatingHours: {
+      mon: "8am-5pm", tue: "8am-5pm", wed: "8am-5pm",
+      thu: "8am-5pm", fri: "8am-5pm", sat: "9am-1pm",
     },
-    {
-      name: "Surulere Health Centre",
-      type: "clinic",
-      location: { type: "Point", coordinates: [3.3604, 6.4968] },
-      address: "15 Bode Thomas Street, Surulere, Lagos",
-      phone: "+2347890123",
-      services: ["antenatal", "immunisation", "family planning", "general outpatient", "HIV testing"],
-      operatingHours: {
-        mon: "8am-5pm", tue: "8am-5pm", wed: "8am-5pm",
-        thu: "8am-5pm", fri: "8am-4pm", sat: "9am-1pm",
-      },
-      isActive: true,
-      addedBy: admin._id,
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Kwame Nkrumah University of Science and Technology (KNUST) Hospital",
+    type: "hospital",
+    location: { type: "Point", coordinates: [5.2925, -1.5771] },
+    address: "KNUST, Kumasi",
+    phone: "+233322033220",
+    services: ["emergency", "cardiology", "surgery", "maternity", "radiology"],
+    operatingHours: "24/7",
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Sekondi-Takoradi General Hospital",
+    type: "hospital",
+    location: { type: "Point", coordinates: [4.9203, -1.7491] },
+    address: "Sekondi-Takoradi, Western Region",
+    phone: "+233312123456",
+    services: ["emergency", "surgery", "maternity", "paediatrics", "radiology", "ICU"],
+    operatingHours: "24/7",
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Ashaiman Health Centre",
+    type: "clinic",
+    location: { type: "Point", coordinates: [5.7343, -0.0531] },
+    address: "Ashaiman, Greater Accra",
+    phone: "+233302446567",
+    services: ["antenatal", "general outpatient", "immunisation", "HIV testing"],
+    operatingHours: {
+      mon: "8am-5pm", tue: "8am-5pm", wed: "8am-5pm",
+      thu: "8am-5pm", fri: "8am-5pm", sat: "9am-2pm",
     },
-    {
-      name: "Medplus Pharmacy Ikeja",
-      type: "pharmacy",
-      location: { type: "Point", coordinates: [3.3515, 6.5955] },
-      address: "12 Oba Akran Avenue, Ikeja, Lagos",
-      phone: "+2348012345678",
-      services: ["pharmacy", "blood pressure check", "diabetes screening", "malaria testing"],
-      operatingHours: {
-        mon: "8am-9pm", tue: "8am-9pm", wed: "8am-9pm",
-        thu: "8am-9pm", fri: "8am-9pm", sat: "9am-8pm", sun: "10am-6pm",
-      },
-      isActive: true,
-      addedBy: admin._id,
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Tamale Teaching Hospital",
+    type: "hospital",
+    location: { type: "Point", coordinates: [9.4000, -0.8500] },
+    address: "Tamale, Northern Region",
+    phone: "+233372022098",
+    email: "info@tamalehospital.edu.gh",
+    services: ["emergency", "surgery", "maternity", "paediatrics", "cardiology", "radiology"],
+    operatingHours: "24/7",
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Ahafo Ano South Health Centre",
+    type: "clinic",
+    location: { type: "Point", coordinates: [7.3544, -1.6903] },
+    address: "Ahafo Ano South, Ashanti Region",
+    phone: "+233506102379",
+    services: ["general outpatient", "antenatal", "family planning", "immunisation"],
+    operatingHours: {
+      mon: "8am-5pm", tue: "8am-5pm", wed: "8am-5pm",
+      thu: "8am-5pm", fri: "8am-4pm", sat: "9am-1pm",
     },
-    {
-      name: "Eko Hospital",
-      type: "hospital",
-      location: { type: "Point", coordinates: [3.3792, 6.4490] },
-      address: "31 Mobolaji Bank Anthony Way, Victoria Island, Lagos",
-      phone: "+2341236789",
-      email: "info@ekohospitals.com",
-      website: "https://ekohospitals.com",
-      services: ["emergency", "cardiology", "oncology", "maternity", "ICU", "radiology", "laboratory"],
-      operatingHours: "24/7",
-      isActive: true,
-      addedBy: admin._id,
-    },
-    {
-      name: "Ajeromi Community Health Worker",
-      type: "chw",
-      location: { type: "Point", coordinates: [3.3212, 6.4684] },
-      address: "Ajeromi-Ifelodun LGA, Lagos",
-      phone: "+2348099887766",
-      services: ["community health", "immunisation", "health education", "referrals", "malaria treatment"],
-      operatingHours: "Mon-Fri 8am-4pm",
-      isActive: true,
-      addedBy: admin._id,
-    },
-    {
-      name: "Medilag Diagnostic Centre",
-      type: "lab",
-      location: { type: "Point", coordinates: [3.3891, 6.5244] },
-      address: "University of Lagos, Yaba, Lagos",
-      phone: "+2348055544433",
-      services: ["blood tests", "urinalysis", "malaria testing", "HIV testing", "pregnancy test", "imaging"],
-      operatingHours: {
-        mon: "7am-6pm", tue: "7am-6pm", wed: "7am-6pm",
-        thu: "7am-6pm", fri: "7am-5pm", sat: "8am-2pm",
-      },
-      isActive: true,
-      addedBy: admin._id,
-    },
-  ];
+    isActive: true,
+    addedBy: admin._id,
+  },
+  {
+    name: "Community Health Worker - Tema",
+    type: "chw",
+    location: { type: "Point", coordinates: [5.6225, -0.0223] },
+    address: "Tema, Greater Accra Region",
+    phone: "+233242232323",
+    services: ["community health", "immunisation", "health education", "malaria treatment", "referrals"],
+    operatingHours: "Mon-Fri 8am-4pm",
+    isActive: true,
+    addedBy: admin._id,
+  },
+];
 
   const createdFacilities = await HealthFacility.insertMany(facilities);
   console.log(`Seeded ${createdFacilities.length} health facilities`);
