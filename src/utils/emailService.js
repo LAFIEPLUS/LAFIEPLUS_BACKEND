@@ -1,9 +1,12 @@
 import { sendEmail } from "../config/mailer.js";
 import { CLIENT_URL } from "../config/env.js";
-import { 
-    contactTemplate, 
-    passwordResetConfirmationTemplate, 
-    passwordResetTemplate, 
+import {
+    consultationAcceptedTemplate,
+    consultationMessageTemplate,
+    contactTemplate,
+    otpTemplate,
+    passwordResetConfirmationTemplate,
+    passwordResetTemplate,
     welcomeTemplate
 } from "./emailTemplates/index.js";
 
@@ -31,5 +34,22 @@ export const sendPasswordResetConfirmationEmail = ({ name, email }) => sendEmail
 export const sendContactEmail = ({ name, email, subject, message }) => sendEmail({
     to: email,
     subject,
-    html: contactTemplate({name, subject, message}),
+    html: contactTemplate({ name, subject, message }),
 });
+
+export const sendConsultationAcceptedEmail = ({ name, email, partnerName, consultationId }) =>
+    sendEmail({
+        to: email,
+        subject: "Your consultation has been accepted — Lafieplus",
+        html: consultationAcceptedTemplate({ name, partnerName, consultationId }),
+    });
+
+export const sendConsultationMessageEmail = ({ name, email, senderName, consultationId }) =>
+    sendEmail({
+        to: email,
+        subject: `New message from ${senderName} — Lafieplus`,
+        html: consultationMessageTemplate({ name, senderName, consultationId }),
+    });
+
+export const sendOtpEmail = ({ name, email, code }) =>
+    sendEmail({ to: email, subject: "Your Lafieplus verification code", html: otpTemplate({ name, code }) });

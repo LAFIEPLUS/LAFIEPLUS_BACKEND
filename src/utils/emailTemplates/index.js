@@ -118,3 +118,29 @@ export const contactTemplate = ({ name, subject, message }) => baseTemplate(`
     <hr class="divider"/>
     <p style="font-size:13px;color:#6b7280;">This is an automated message from ${EMAIL_FROM_NAME}.</p>
   `);
+
+  export const consultationAcceptedTemplate = ({ name, partnerName, consultationId }) =>
+  baseTemplate(`
+    <h2>Your consultation has been accepted</h2>
+    <p>Hi ${name}, good news! <strong>${partnerName}</strong> has accepted your consultation request and is ready to assist you.</p>
+    <a href="${CLIENT_URL}/consultations/${consultationId}" class="btn">Open Consultation</a>
+    <hr class="divider"/>
+    <p style="font-size:13px;color:#6b7280;">Please respond within 24 hours to keep the consultation active.</p>
+  `);
+
+export const consultationMessageTemplate = ({ name, senderName, consultationId }) =>
+  baseTemplate(`
+    <h2>New message in your consultation</h2>
+    <p>Hi ${name}, <strong>${senderName}</strong> has sent you a message.</p>
+    <a href="${CLIENT_URL}/consultations/${consultationId}" class="btn">View Message</a>
+  `);
+
+export const otpTemplate = ({ name, code }) =>
+  baseTemplate(`
+    <h2>Verify your account</h2>
+    <p>Hi ${name || "there"}, here is your Lafieplus verification code:</p>
+    <div class="otp">${code}</div>
+    <p style="font-size:13px;color:#6b7280;">This code expires in 10 minutes. Do not share it with anyone.</p>
+    <hr class="divider"/>
+    <p style="font-size:13px;color:#6b7280;">If you didn't request this, you can safely ignore this email.</p>
+  `);
