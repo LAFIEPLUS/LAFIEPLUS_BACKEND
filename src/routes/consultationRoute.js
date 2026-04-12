@@ -11,7 +11,7 @@ import {
     getConsultations, 
     getMessages, 
     sendMessage 
-} from "../controllers/consultationController";
+} from "../controllers/consultationController.js";
 import { PERMISSIONS } from "../config/roles.js";
 
 const consultationRouter = Router();

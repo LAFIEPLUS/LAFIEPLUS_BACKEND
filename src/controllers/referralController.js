@@ -9,7 +9,7 @@ const VALID_TRANSITIONS = {
     cancelled: [],
 };
 
-/ @desc   Create referral
+// @desc   Create referral
 // @route  POST /api/referrals
 // @access Private (user, partner, admin)
 export const createReferral = asyncHandler(async (req, res) => {

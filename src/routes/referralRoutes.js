@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authorize, protect } from "../middleware/auth.js";
 import validate from "../middleware/validate.js";
-import { referralSchema, referralStatusSchema } from "../../validators/healthValidator";
+import { referralSchema, referralStatusSchema } from "../../validators/healthValidator.js";
 import { createReferral, getReferral, getReferrals, updateReferralStatus } from "../controllers/referralController.js";
 
 const referralRouter = Router();

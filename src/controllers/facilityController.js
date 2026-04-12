@@ -1,6 +1,6 @@
 import HealthFacility from "../models/HealthFacility.js";
 import SymptomSession from "../models/SymptomSession.js";
-import asyncHandler from "../utils/asyncHandler";
+import asyncHandler from "../utils/asyncHandler.js";
 import { sendError, sendSuccess } from "../utils/apiResponse.js";
 
 const RISK_TO_TYPES = {

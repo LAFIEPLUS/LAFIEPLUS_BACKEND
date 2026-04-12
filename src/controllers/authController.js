@@ -4,7 +4,8 @@ import asyncHandler from "../utils/asyncHandler.js";
 import { UserModel } from "../models/User.js";
 import { sendError, sendSuccess } from "../utils/apiResponse.js";
 import {
-    sendPasswordResetConfirmationEmail, sendPasswordResetEmail,
+    sendPasswordResetConfirmationEmail,
+    sendPasswordResetEmail,
     sendWelcomeEmail
 } from "../utils/emailService.js";
 import { blacklistToken } from "../utils/tokenBlacklist.js";
