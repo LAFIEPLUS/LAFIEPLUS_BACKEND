@@ -71,6 +71,7 @@ export const facilitySchema = Joi.object({
   address:        Joi.string().required(),
   phone:          Joi.string().pattern(/^\+?[\d\s\-().]{7,20}$/),
   email:          Joi.string().email({ tlds: { allow: false } }),
+  website: Joi.string().uri().allow('', null),
   services:       Joi.array().items(Joi.string().max(100)),
   operatingHours: Joi.alternatives().try(Joi.string(), Joi.object()),
 });

@@ -4,7 +4,7 @@ import { sendError, sendSuccess } from "../utils/apiResponse.js";
 
 const VALID_TRANSITIONS = {
     pending: ["accepted", "cancelled"],
-    accepted: ["competed", "cancelled"],
+    accepted: ["completed", "cancelled"],
     completed: [],
     cancelled: [],
 };

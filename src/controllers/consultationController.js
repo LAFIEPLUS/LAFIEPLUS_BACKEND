@@ -6,6 +6,31 @@ import { UserModel } from "../models/User.js";
 import { sendConsultationAcceptedEmail, sendConsultationMessageEmail } from "../utils/emailService.js";
 import Referral from "../models/Referral.js";
 
+/**
+ * Same rules as getConsultations for partners: pending (unassigned) items in their specialty
+ * queue, or assigned/active items where they are partnerId.
+ */
+function partnerCanAccessPendingQueue(reqUser, consultation) {
+    if (reqUser.role !== "partner" || consultation.status !== "pending") return false;
+    const assigned = consultation.partnerId?._id ?? consultation.partnerId;
+    if (assigned && assigned.toString() !== reqUser._id.toString()) return false;
+    const specialty = reqUser.partnerInfo?.specialty;
+    if (specialty && specialty !== "general") {
+        return consultation.specialty === specialty;
+    }
+    return true;
+}
+
+function canAccessConsultation(reqUser, consultation) {
+    const uid = reqUser._id.toString();
+    const ownerId = consultation.userId?._id?.toString() ?? consultation.userId?.toString();
+    const partnerId = consultation.partnerId?._id?.toString() ?? consultation.partnerId?.toString();
+    const isOwner = ownerId === uid;
+    const isAssignedPartner = partnerId === uid;
+    if (isOwner || isAssignedPartner || reqUser.role === "admin") return true;
+    return partnerCanAccessPendingQueue(reqUser, consultation);
+}
+
 // @desc   Open a consultation request
 // @route  POST /api/consultations
 // @access Private (user)
@@ -88,9 +113,7 @@ export const getConsultation = asyncHandler(async (req, res) => {
 
     if (!consultation) return sendError(res, 404, "Consultation not found");
 
-    const isOwner = consultation.userId._id.toString() === req.user._id.toString();
-    const isPartner = consultation.partnerId?._id.toString() === req.user._id.toString();
-    if (!isOwner && !isPartner && req.user.role !== "admin") {
+    if (!canAccessConsultation(req.user, consultation)) {
         return sendError(res, 403, "Access denied");
     }
 
@@ -181,16 +204,17 @@ export const getMessages = asyncHandler(async (req, res) => {
     const limit = Math.min(100, parseInt(req.query.limit, 10) || 50);
 
     const consultation = await Consultation.findById(req.params.id)
-        .select("messages userId partnerId status");
+        .select("messages userId partnerId status specialty");
 
     if (!consultation) return sendError(res, 404, "Consultation not found");
 
-    const isParticipant =
+    const canReadMessages =
         consultation.userId.toString() === req.user._id.toString() ||
         consultation.partnerId?.toString() === req.user._id.toString() ||
-        req.user.role === "admin";
+        req.user.role === "admin" ||
+        partnerCanAccessPendingQueue(req.user, consultation);
 
-    if (!isParticipant)
+    if (!canReadMessages)
         return sendError(res, 403, "Access denied");
 
     const total = consultation.messages.length;

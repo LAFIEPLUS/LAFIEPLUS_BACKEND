@@ -1,6 +1,8 @@
 import { UserModel } from "../models/User.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { sendError, sendSuccess } from "../utils/apiResponse.js";
+import Consultation from "../models/Consultation.js";
+import Referral from "../models/Referral.js";
 
 
 // @desc   List available partners (filterable by specialty)
@@ -67,3 +69,21 @@ export const updatePartnerProfile = asyncHandler(async (req, res) => {
     );
     sendSuccess(res, 200, "Partner profile updated", { partnerInfo: user.partnerInfo });
 });
+
+
+// @desc Get Partner dashboard stats
+// @route GET /api/partner/stats
+// @access Private (partner)
+export const getPartnerStats = asyncHandler(async (req, res) => {
+    const [totalConsultations, activeConsultations, closedConsultations, totalReferrals] =
+    await Promise.all([
+        Consultation.countDocuments({partnerId: req.user._id}),
+        Consultation.countDocuments({partnerId: req.user._id, status: "active"}),
+        Consultation.countDocuments({partnerId: req.user._id, status: "closed"}),
+        Referral.countDocuments({issuedBy: req.user._id}),
+    ]);
+
+    sendSuccess(res, 200, "Stats retrieved", {
+        stats: {totalConsultations, activeConsultations, closedConsultations, totalReferrals}
+    })
+})

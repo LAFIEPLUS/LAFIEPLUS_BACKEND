@@ -62,6 +62,7 @@ export const login = asyncHandler(async (req, res) => {
     const { email, phone, password } = req.body;
     const query = email ? { email } : { phone };
     const user = await UserModel.findOne(query).select("+password");
+    
 
     if (!user || !(await user.matchPassword(password))) {
         return sendError(res, 401, "Invalid credentials");

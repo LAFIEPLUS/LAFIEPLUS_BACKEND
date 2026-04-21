@@ -10,6 +10,7 @@ import { hasPermission } from "../config/roles.js";
 
 export const protect = asyncHandler(async (req, res, next) => {
     let token;
+    
 
     if (req.headers.authorization?.startsWith("Bearer")) {
         token = req.headers.authorization.split(" ")[1];
@@ -73,9 +74,9 @@ export const optionalAuth = asyncHandler(async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith("Bearer")) {
       const token = authHeader.split(" ")[1];
-      if (!isBlacklisted(token)) {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = await User.findById(decoded.id).select("-password");
+      if (!(await isBlacklisted(token))) {
+        const decoded = jwt.verify(token, JWT_SECRET_KEY);
+        req.user = await UserModel.findById(decoded.id).select("-password");
       }
     }
   } catch (_) { /* ignore */ }

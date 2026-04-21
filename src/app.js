@@ -58,14 +58,14 @@ app.get("/health", (req, res) => res.json({success: true, message: "Healthy", ti
 );
 
 // --- Routes ---
-app.use(authRouter);
-app.use(userRouter);
-app.use(symptomRouter);
-app.use(partnerRouter);
-app.use(referralRouter);
-app.use(consultationRouter);
-app.use(facilityRouter);
-app.use(libraryRouter);
+app.use("/api/auth", authRouter);
+app.use("/api", userRouter);
+app.use("/api", symptomRouter);
+app.use("/api", partnerRouter);
+app.use("/api", referralRouter);
+app.use("/api", consultationRouter);
+app.use("/api", facilityRouter);
+app.use("/api", libraryRouter);
 
 // --- 404 Handler ---
 app.use((req, res) => res.status(404).json({success: false, message: `Route ${req.originalUrl} not found`})
