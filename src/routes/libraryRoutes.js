@@ -17,9 +17,26 @@ libraryRouter.get("/library/categories", getCategories);
 libraryRouter.get("/library/articles", optionalAuth, getArticles);
 libraryRouter.get("/library/articles/:id", optionalAuth, getArticle);
 
-libraryRouter.use(protect, authorize("admin"));
-libraryRouter.post("/library/article", validate(articleSchema), createArticle);
-libraryRouter.put("/library/articles/:id", updateArticle);
-libraryRouter.delete("/library/article/:id", deleteArticle);
+libraryRouter.post(
+  "/library/article",
+  protect,
+  authorize("admin"),
+  validate(articleSchema),
+  createArticle
+);
+
+libraryRouter.put(
+  "/library/articles/:id",
+  protect,
+  authorize("admin"),
+  updateArticle
+);
+
+libraryRouter.delete(
+  "/library/article/:id",
+  protect,
+  authorize("admin"),
+  deleteArticle
+);
 
 export default libraryRouter;

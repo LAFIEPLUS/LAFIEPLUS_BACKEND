@@ -41,9 +41,16 @@ export const protect = asyncHandler(async (req, res, next) => {
 // --- authorize
 // Restrict to specific roles
 export const authorize = (...roles) => (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    const role = req.user?.role;
+
+    if (!role) {
+        return sendError(res, 401, "Not authenticated");
+    }
+
+    if (!roles.includes(role)) {
         return sendError(res, 403, `Access denied. Required role: ${roles.join(" or ")}`);
     }
+
     next();
 };
 
