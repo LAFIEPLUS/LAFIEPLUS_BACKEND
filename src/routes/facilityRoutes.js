@@ -1,21 +1,34 @@
 import { Router } from "express";
 import validate from "../middleware/validate.js";
 import { facilitySchema } from "../../validators/healthValidator.js";
-import { createFacility, getFacility, getNearby, suggestFacilities, updateFacility } from "../controllers/facilityController.js";
+import {
+  createFacility,
+  getFacility,
+  getNearby,
+  suggestFacilities,
+  updateFacility,
+} from "../controllers/facilityController.js";
 import { authorize, can, optionalAuth, protect } from "../middleware/auth.js";
 import { PERMISSIONS } from "../config/roles.js";
 
 const facilityRouter = Router();
 
-facilityRouter.get("/facility/nearby", protect, can(PERMISSIONS.READ_FACILITIES), getNearby);
+// ─── Protected — any logged in user ───────────────────────────────
+facilityRouter.get("/facility/nearby",
+  protect, can(PERMISSIONS.READ_FACILITIES), getNearby);
 
-facilityRouter.get("/facility/suggest", protect, can(PERMISSIONS.READ_FACILITIES), suggestFacilities);
+facilityRouter.get("/facility/suggest",
+  protect, can(PERMISSIONS.READ_FACILITIES), suggestFacilities);
 
-facilityRouter.get("/facility/:id", optionalAuth, getFacility);
+// ─── Public ────────────────────────────────────────────────────────
+facilityRouter.get("/facility/:id",
+  optionalAuth, getFacility);
 
-facilityRouter.use(protect, authorize("admin"));
-facilityRouter.post("/facility", validate(facilitySchema), createFacility);
+// ─── Admin only — protect + authorize on each route individually ───
+facilityRouter.post("/facility",
+  protect, authorize("admin"), validate(facilitySchema), createFacility);
 
-facilityRouter.put("/facility/:id", updateFacility);
+facilityRouter.put("/facility/:id",
+  protect, authorize("admin"), updateFacility);
 
 export default facilityRouter;
