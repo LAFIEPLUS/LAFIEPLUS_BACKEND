@@ -24,12 +24,34 @@ app.set("trust proxy", 1);
 
 // ---Security and Logging---
 app.use(helmet());
-app.use(cors({
-    origin: CLIENT_URL,
+// app.use(cors({
+//     origin: CLIENT_URL,
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true,
+// }));
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.DEVELOPMENT_URL,
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-}));
+  })
+);
+
 
 if (NODE_ENV === "development") app.use(morgan("dev"));
 

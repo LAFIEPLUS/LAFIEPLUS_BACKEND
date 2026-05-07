@@ -75,6 +75,8 @@ Respond ONLY with a JSON object (no markdown, no backticks)
 Risk guide: low=self-care, moderate=see doctor soon, high=see doctor urgently, emergency=call ambulance.
 Use simple, culturally appropriate language for West Africa.`;
 
+console.log("[AI Service] Calling Groq with key:", GROQ_API_KEY.substring(0, 12) + "...");
+
     try {
         const { data } = await axios.post(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -92,7 +94,8 @@ Use simple, culturally appropriate language for West Africa.`;
         const text = data.choices[0].message.content.trim().replace(/```json|```/g, "").trim();
         return JSON.parse(text);
     } catch (error) {
-        console.error("[AI Service] groq error:", error.message, "— falling back to rule-based");
+        // console.error("[AI Service] groq error:", error.message, "— falling back to rule-based");
+        console.error("[AI Service] groq error:", error.response?.data || error.message, "— falling back to rule-based");
         return ruleBaseRisk(symptoms);
     }
 };
