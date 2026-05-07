@@ -81,7 +81,7 @@ console.log("[AI Service] Calling Groq with key:", GROQ_API_KEY.substring(0, 12)
         const { data } = await axios.post(
             "https://api.groq.com/openai/v1/chat/completions",
             {
-                model: "llama3-70b-8192",
+                model: "llama-3.1-8b-instant",
                 messages: [{ role: "user", content: prompt }],
                 max_tokens: 400,
                 temperature: 0.2,
