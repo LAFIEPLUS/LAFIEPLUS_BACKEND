@@ -35,22 +35,27 @@ const allowedOrigins = [
   process.env.DEVELOPMENT_URL,
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
+const normalize = (u) => u?.trim().replace(/\/+$/, "");
 
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.DEVELOPMENT_URL,
+  "https://lafieplus.com",
+  "https://www.lafieplus.com",
+].filter(Boolean).map(normalize);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);           // curl, Postman, server-to-server
+    callback(null, allowedOrigins.includes(normalize(origin)));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 
 
 if (NODE_ENV === "development") app.use(morgan("dev"));
