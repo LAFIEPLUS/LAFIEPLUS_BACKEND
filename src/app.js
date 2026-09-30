@@ -35,8 +35,7 @@ const allowedOrigins = [
   process.env.DEVELOPMENT_URL,
 ];
 
-app.use(
-  const normalize = (u) => u?.trim().replace(/\/+$/, "");
+const normalize = (u) => u?.trim().replace(/\/+$/, "");
 
 const allowedOrigins = [
   process.env.CLIENT_URL,
