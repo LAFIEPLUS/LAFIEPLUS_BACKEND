@@ -24,16 +24,6 @@ app.set("trust proxy", 1);
 
 // ---Security and Logging---
 app.use(helmet());
-// app.use(cors({
-//     origin: CLIENT_URL,
-//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//     credentials: true,
-// }));
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  process.env.DEVELOPMENT_URL,
-];
 
 const normalize = (u) => u?.trim().replace(/\/+$/, "");
 
