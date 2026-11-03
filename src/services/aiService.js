@@ -65,7 +65,7 @@ export const aiSymptomCheck = async (symptoms, userContext = {}) => {
 ${context}
 Reported symptoms: ${symptoms.join(", ")}.
     
-Provide a medical triage assessment following this structure:
+Provide a medical triage assessment outputted as a valid json object matching this structure:
 {
   "riskLevel": "low|moderate|high|emergency",
   "summary": "1-2 sentence plain-language summary",
@@ -105,3 +105,55 @@ Use simple, culturally appropriate language for West Africa.`;
         return ruleBaseRisk(symptoms);
     }
 };
+
+
+// export const aiSymptomCheck = async (symptoms, userContext = {}) => {
+//     if (!GROQ_API_KEY || GROQ_API_KEY === "") {
+//         console.log("[AI Service] No API key configured - using rule-based fallback");
+//         return ruleBaseRisk(symptoms);
+//     }
+
+//     const context = userContext.age
+//         ? `Patient: ${userContext.age}-year-old ${userContext.gender || "person"}${userContext.maternalStatus ? `, ${userContext.maternalStatus}` : ""}.`
+//         : "";
+
+//     const prompt = `You are a medical triage assistant for LafiePlus, a health platform in Ghana - West Africa.
+// ${context}
+// Reported symptoms: ${symptoms.join(", ")}.
+    
+// Respond ONLY with a JSON object (no markdown, no backticks)
+// :
+// {
+//   "riskLevel": "low|moderate|high|emergency",
+//   "summary": "1-2 sentence plain-language summary",
+//   "nextSteps": ["step 1", "step 2", "step 3"],
+//   "preventiveTips": ["tip 1", "tip 2"],
+//   "seekCareImmediately": true|false
+// }
+
+// Risk guide: low=self-care, moderate=see doctor soon, high=see doctor urgently, emergency=call ambulance.
+// Use simple, culturally appropriate language for West Africa.`;
+
+
+//     try {
+//         const { data } = await axios.post(
+//             "https://api.groq.com/openai/v1/chat/completions",
+//             {
+//                 model: "openai/gpt-oss-20b",
+//                 messages: [{ role: "user", content: prompt }],
+//                 max_tokens: 400,
+//                 temperature: 0.2,
+//             },
+//             {
+//                 headers: { Authorization: `Bearer ${GROQ_API_KEY}` },
+//                 timeout: 10000,
+//             }
+//         );
+//         const text = data.choices[0].message.content.trim().replace(/```json|```/g, "").trim();
+//         return JSON.parse(text);
+//     } catch (error) {
+//         // console.error("[AI Service] groq error:", error.message, "— falling back to rule-based");
+//         console.error("[AI Service] groq error:", error.response?.data || error.message, "— falling back to rule-based");
+//         return ruleBaseRisk(symptoms);
+//     }
+// };
