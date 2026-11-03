@@ -48,6 +48,8 @@ const ruleBaseRisk = (symptoms) => {
     };
 };
 
+
+
 export const aiSymptomCheck = async (symptoms, userContext = {}) => {
     if (!GROQ_API_KEY || GROQ_API_KEY === "") {
         console.log("[AI Service] No API key configured - using rule-based fallback");
@@ -58,12 +60,12 @@ export const aiSymptomCheck = async (symptoms, userContext = {}) => {
         ? `Patient: ${userContext.age}-year-old ${userContext.gender || "person"}${userContext.maternalStatus ? `, ${userContext.maternalStatus}` : ""}.`
         : "";
 
+    // CLEANED PROMPT: Removed raw JSON string constraints so the model focuses purely on data delivery
     const prompt = `You are a medical triage assistant for LafiePlus, a health platform in Ghana - West Africa.
 ${context}
 Reported symptoms: ${symptoms.join(", ")}.
     
-Respond ONLY with a JSON object (no markdown, no backticks)
-:
+Provide a medical triage assessment following this structure:
 {
   "riskLevel": "low|moderate|high|emergency",
   "summary": "1-2 sentence plain-language summary",
@@ -75,7 +77,6 @@ Respond ONLY with a JSON object (no markdown, no backticks)
 Risk guide: low=self-care, moderate=see doctor soon, high=see doctor urgently, emergency=call ambulance.
 Use simple, culturally appropriate language for West Africa.`;
 
-
     try {
         const { data } = await axios.post(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -84,16 +85,22 @@ Use simple, culturally appropriate language for West Africa.`;
                 messages: [{ role: "user", content: prompt }],
                 max_tokens: 400,
                 temperature: 0.2,
+                // FORCE NATIVE JSON: This natively instructs Groq to output clean JSON structure
+                response_format: { type: "json_object" } 
             },
             {
-                headers: { Authorization: `Bearer ${GROQ_API_KEY}` },
+                headers: { 
+                    "Authorization": `Bearer ${GROQ_API_KEY}`,
+                    "Content-Type": "application/json" // Explicitly declare Content-Type
+                },
                 timeout: 10000,
             }
         );
-        const text = data.choices[0].message.content.trim().replace(/```json|```/g, "").trim();
+
+        // Native JSON Mode returns perfectly formatted text string directly
+        const text = data.choices[0].message.content.trim();
         return JSON.parse(text);
     } catch (error) {
-        // console.error("[AI Service] groq error:", error.message, "— falling back to rule-based");
         console.error("[AI Service] groq error:", error.response?.data || error.message, "— falling back to rule-based");
         return ruleBaseRisk(symptoms);
     }
