@@ -83,7 +83,7 @@ Use simple, culturally appropriate language for West Africa.`;
             {
                 model: "openai/gpt-oss-20b",
                 messages: [{ role: "user", content: prompt }],
-                max_tokens: 400,
+                max_tokens: 1000,
                 temperature: 0.2,
                 // FORCE NATIVE JSON: This natively instructs Groq to output clean JSON structure
                 response_format: { type: "json_object" } 
