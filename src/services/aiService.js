@@ -80,7 +80,7 @@ Use simple, culturally appropriate language for West Africa.`;
         const { data } = await axios.post(
             "https://api.groq.com/openai/v1/chat/completions",
             {
-                model: "llama-3.1-8b-instant",
+                model: "openai/gpt-oss-20b",
                 messages: [{ role: "user", content: prompt }],
                 max_tokens: 400,
                 temperature: 0.2,
