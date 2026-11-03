@@ -1,6 +1,5 @@
 import "dotenv/config";
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 import { UserModel } from "../src/models/User.js";
 import HealthArticle from "../src/models/HealthArticle.js";
 import HealthFacility from "../src/models/HealthFacility.js";
